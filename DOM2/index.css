@@ -1,0 +1,24 @@
+.container{
+    background-color: rgb(92, 157, 215);
+    height: 500px;
+    width: 300px;
+    margin: auto;
+    padding: 20px;
+}
+
+#trafficLights{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: auto;
+    align-items: center;
+   
+}
+.light{
+    height: 80px;
+    width: 80px;
+    background-color: aqua;
+    border-radius: 50%;
+    gap: 20px;
+}
+

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login page</title>
+</head>
+<body>
+
+<h1>Login here</h1>
+<form onclick="handleSubmitlogin(event)">
+<label>Email : </label>
+<input type="email" email="email" id="email" autocomplete="on"> <br><br>
+<label>Password : </label>
+<input type="password" password="pswd" id="password" > <br><br>
+<button onclick="loginhere()">Login</button>
+
+<p>if you don't have an account <a href="./sign.html">Signup</a>here</p>
+</form>
+<script>
+    function handleSubmitlogin(e){
+        let loginemail=document.getElementById("email").value.trim()
+        let loginpassword = document.getElementById('password').value.trim()
+        let allSignUpDetails = JSON.parse(localStorage.getItem('allusers'))
+        let user
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+/* #circle{
+    height: 250px;
+    width: 250px;
+    border-radius: 50%;
+    background-color: blue;
+    
+
+}
+#square{
+    height: 250px;
+    width: 250px;
+    background-color: #2fff00;
+    
+
+}
+#rect{
+    height: 250px;
+    width: 500px;
+    background-color: #86bcd4;
+} */
+
+#cardcontainer{
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap:20px
+}
+.cardDiv{
+    background-color: rgb(227, 236, 236);
+    width: 250px;
+    height: 300px;
+    border: 5px solid black;
+    border-radius: 20px;
+    justify-items: center;
+    padding: 20px;
+ 
+}
+.cardDiv>img{
+    width: 100%;
+    height: 70%;
+}

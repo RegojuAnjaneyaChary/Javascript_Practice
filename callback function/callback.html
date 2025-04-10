@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>callback</title>
+</head>
+<body>
+    <h1>callback function</h1>
+    <script>
+        function step1(item, nextstep){
+        alert(`you have ordered ${item}`)
+        setTimeout(()=>{
+            nextstep()
+
+        }, 2000)
+        }
+        step1("laptop dell", ()=>{
+            alert("your laptop dell order shipped successfully")
+        })
+
+    </script>
+</body>
+</html>
