@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random colors</title>
+</head>
+
+<body>
+    <h1>Random colors</h1>
+    <button id=randomClr>RandomClr</button>
+    <script>
+
+        let btn = document.getElementById("randomClr");
+            btn.addEventListener("click", () => {
+
+            let hexausage = 'abcdef0123456789'
+            let hexacolor = '#'
+            for (let i = 0; i < 6; i++) {
+                const indexNum = Math.floor(Math.random() * hexausage.length);
+                //  console.log(hexausage[indexNum])
+                hexacolor += hexausage[indexNum]
+
+            }
+            console.log(hexacolor)
+            document.body.style.backgroundColor = hexacolor
+
+        });
+
+
+
+    </script>
+
+</body>
+
+</html>

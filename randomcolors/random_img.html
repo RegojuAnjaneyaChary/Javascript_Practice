@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Random images </h1>
+    <button>randomImg</button>
+    <div id="imgContainer"></div>
+    <script>
+        const images = ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGHWLa9PoJJ-AluPwNSu23NMVBFMLlTvc3qw&s",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVGHL9r9OucwArH8yO3rEDPryG4V3tSCBw-w&s",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlxpKSuERwIzw3d1BHeOtp2E4ZegRT-H4179MtkvZAmDFUL8gP95TVZXQKTpdkODI5SgY&usqp=CAU",
+            "https://images.immediate.co.uk/production/volatile/sites/3/2023/01/Roblox-Image-ID-List-6b19bbf.jpg?quality=90&fit=700,466",
+            "https://imgd.aeplcdn.com/1056x594/n/cw/ec/177565/pulsar-n125-right-side-view-6.jpeg?isig=0&q=80"
+
+        ]
+        const btn = document.querySelector("button");
+        const imgContainer = document.getElementById("imgContainer")
+            btn.addEventListener("click", ()=>{
+            imgContainer.innerHTML = ""
+            const imagesIndex = Math.floor(Math.random() * images.length)
+            let imgTag = document.createElement("img");
+
+            imgTag.setAttribute("src", images[imagesIndex])
+            imgContainer.append(imgTag)
+        })
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random_Numbers</title>
+    <style>
+        .demo{
+            font-size: 40px;
+        }
+        #demo{
+            font-size: 40px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Random Numbers otp generation</h1>
+    <span class="demo"> Random OTP : </span> <span id="demo"></span>
+    <script>
+     let otp = '';
+     for(let i=0; i<4; i++){
+        const randomNum = Math.floor(Math.random()*10);
+        console.log(randomNum);
+        otp+=randomNum
+     }
+     console.log("otp", otp)
+     document.getElementById("demo").innerHTML = otp
+    </script>
+</body>
+</html>
