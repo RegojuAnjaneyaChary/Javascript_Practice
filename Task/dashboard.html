@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+      .cardDiv{
+        height: 300px;
+        width: 250px;
+        border: 2px solid black;
+        border-radius: 10px;
+        align-content: center;
+        justify-items: center;
+        background-color: antiquewhite;
+      }
+      #cardcontainer{
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        gap: 20px;
+        padding: auto;
+        margin-top: 800px; 
+       
+      }
+
+      img{
+        height: 200px;
+        width: 200px;
+      }
+      h1{
+    
+      text-align: center;
+      }
+      #cards-dashboard{
+       height: 100px;
+       width: 100%;
+      background-color: bisque;
+      align-items: center;
+      align-content: center;
+      display: flex; 
+      justify-content: center;
+      gap: 20px;
+     
+      }
+      button{
+        border-radius: 5px;
+        height: 2rem;
+      }
+    </style>
+</head>
+<body>
+    <h1> cards-dashboard</h1>
+
+    <div id="cards-dashboard">
+    <button onclick="getelementbygrocery('electronics')">Electronics</button>
+    <button onclick="getelementbygrocery('jewelery')">Jewellery</button>
+    <button onclick="logout()">logout</button>
+    <div id="cardcontainer"></div>
+    
+
+  </div>
+    <script src="./dashboard.js"></script>
+</body>
+</html>

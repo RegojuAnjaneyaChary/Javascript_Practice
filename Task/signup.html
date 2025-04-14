@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>signup-form</title>
+</head>
+
+<body>
+    <form onsubmit="signup(event)">
+        <label for="name">Name : </label>
+        <input type="text" name="name" id="name"><br><br>
+        <label for="email">Email :</label>
+        <input type="email" name="email" id="email"><br><br>
+
+        <label for="password">Password : </label>
+        <input type="password" password="password" id="password">
+        <button id="submit">SIGNUP</button>
+    </form>
+
+    <script>
+        function signup(e) {
+            e.preventDefault();
+            let name = document.getElementById("name").value.trim();
+            let email = document.getElementById("email").value.trim();
+            let password = document.getElementById("password").value.trim();
+
+            let newuser = {
+                username: name,
+                useremail: email,
+                userpassword: password
+
+            }
+
+            let getdata = JSON.parse(localStorage.getItem("signup")) || [];
+            getdata.push(newuser)
+            console.log(newuser)
+            localStorage.setItem("currentuser", JSON.stringify(newuser))
+
+            let setdata = localStorage.setItem("signup", JSON.stringify(getdata))
+            window.location.href = './login.html'
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

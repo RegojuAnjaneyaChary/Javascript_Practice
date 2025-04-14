@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login-form</title>
+</head>
+<body>
+    <h1>Login-form</h1>
+    <form onsubmit="login(event)" >
+        
+        <label for="email">Email :</label>
+        <input type="email" name="email" id="email"><br><br>
+
+        <label for="password">Password : </label>
+        <input type="password" password="password" id="password">
+        <button id="submit">login</button>
+
+    </form>
+
+    <script>
+        function login(e){
+            e.preventDefault()
+            let email = document.getElementById("email").value.trim();
+            let password = document.getElementById("password").value.trim();
+
+            let getdata1 = JSON.parse(localStorage.getItem("signup"))
+            let existuser = getdata1.find((x)=> x.useremail === email && x.userpassword === password);
+            if(existuser){
+                alert("login successful")
+                localStorage.setItem("currentuser", JSON.stringify(existuser))
+                window.location.href="./dashboard.html"
+            }else{
+                alert("invalid creditionals")
+            }
+
+
+        }
+    </script>
+</body>
+</html>
