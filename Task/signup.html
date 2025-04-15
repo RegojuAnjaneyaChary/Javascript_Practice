@@ -8,17 +8,20 @@
 </head>
 
 <body>
+<center>
+     <h1>SIGNUP-FORM</h1>
     <form onsubmit="signup(event)">
         <label for="name">Name : </label>
-        <input type="text" name="name" id="name"><br><br>
+        <input type="text" name="name" id="name" autocomplete="off" required><br><br>
         <label for="email">Email :</label>
-        <input type="email" name="email" id="email"><br><br>
+        <input type="email" name="email" id="email"  autocomplete="off" required><br><br>
 
         <label for="password">Password : </label>
-        <input type="password" password="password" id="password">
+        <input type="password" password="password" id="password" required><br><br>
         <button id="submit">SIGNUP</button>
     </form>
 
+</center>
     <script>
         function signup(e) {
             e.preventDefault();
