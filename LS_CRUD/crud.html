@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD using local storage</title>
+    <style>
+        #edit{
+            height: 1.5rem;
+            width: 3rem;
+            background-color: lightgreen;
+            border-radius: 3px;
+        }
+
+        #delete{
+            height: 1.5rem;
+            width: 3rem;
+            background-color:rgb(225, 137, 105);
+            border-radius: 3px; 
+        }
+
+        #button{
+            height: 1.5rem;
+            width: 5rem;
+            background-color:rgb(235, 155, 199);
+            border-radius: 3px; 
+        }
+        body{
+            background-color: azure;
+        }
+        span{
+            font-size:20px;
+            padding: 1rem;
+        }
+       
+    </style>
+</head>
+<body>
+    <center>
+    <h1>CRUD Operations</h1>
+   <h3> Create, Read, Update, Delete</h3>
+
+        <input type="text" id="input"  autocomplete="off">
+        <button id="button"> Add Task</button><br><br>
+        <div id="allTasksContainer"></div><br><br>
+      </center>
+    <script src="crud.js"></script>
+</body>
+</html>
