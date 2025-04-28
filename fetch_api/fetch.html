@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fetch_api get</title>
+    <style>
+        .cardsdiv{
+            height: 43vh;
+            width: 20vw;
+            background-color: rgb(235, 230, 221);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 2px 2px 2px 2px #141212;
+            border-radius: 8px;
+       
+        }
+        #CardsContainer{
+            margin: 10px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap:2rem 
+            
+             
+        }
+.cardsdiv >img{
+    height: 28vh;
+    width: 20vw;
+}
+
+#fakeApibuttons{
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+}
+
+button {
+    height: 8vh;
+    border-radius: 1rem;
+    font-size: 20px;
+    padding: 8px;
+    box-shadow: 1px 1px 1px 1px black;
+    background-color: lightgreen;
+}
+    </style>
+</head>
+<body>
+
+ <h1> Retrieving Data from a Dummy API</h1>
+ <div id="fakeApibuttons">
+    
+ <button  onclick="getdata()">FakeApi</button><br><br>
+ 
+ <button onclick="getdata1()">DummyApi</button><br><br><br><br>
+ </div>
+ <br><br>
+ <div id="CardsContainer"></div>
+
+
+<script src="fetch.js"></script>
+</body>
+</html>
