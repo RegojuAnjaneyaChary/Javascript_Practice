@@ -11,20 +11,49 @@
         #demo{
             font-size: 40px;
         }
+        center{
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            margin-top: 100px;   
+        }
+        button{
+            height: 2rem;
+            width: 5rem;
+            background-color:rgb(56, 236, 80);
+            border-radius: 3px;
+        }
     </style>
 </head>
 <body>
-    <h1>Random Numbers otp generation</h1>
+    <center>
+    <h1>Random Numbers OTP generation</h1>
+    <div>
     <span class="demo"> Random OTP : </span> <span id="demo"></span>
+    </div>
+    <br><br>
+    <button onclick="changeotp()">click</button>
+    </center>
     <script>
-     let otp = '';
-     for(let i=0; i<4; i++){
+
+function changeotp(){
+
+    let otp = '';
+     for(let i=0; i<6; i++){
         const randomNum = Math.floor(Math.random()*10);
         console.log(randomNum);
         otp+=randomNum
      }
-     console.log("otp", otp)
+     console.log("otp", otp )
+
      document.getElementById("demo").innerHTML = otp
+
+
+}
+
+
+     
+
     </script>
 </body>
 </html>
