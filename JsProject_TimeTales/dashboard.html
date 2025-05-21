@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dashboard</title>
+    <link rel="stylesheet" href="./dashboard.css">
+
+
+</head>
+<body>
+<!-- <div id="navbarcontainer"> -->
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">TimeTales</a>
+    <div class="nav-links" id="nav-links">
+      <a href="create.html">Create Capsule</a>
+      <a href="capsules.html">My Capsules</a>
+      <button id="authBtn">Logout</button>
+    </div>
+    <button class="menu-toggle" id="menuToggle">☰</button>
+  </div>
+</nav> <br>
+<!--  -->
+  <form id="capsule-form">
+      <h1>Create Capsule</h1>
+    <input type="text" id="title" placeholder="Title" required>
+    <textarea id="description" placeholder="Description"></textarea>
+    <input type="file" id="media" required>
+    <input type="date" id="openDate" required>
+    <button type="submit">Save Capsule</button>
+  </form>
+
+  <!-- </div> -->
+  <script type="module" src="./dashboard.js"></script>
+</body>
+</html>

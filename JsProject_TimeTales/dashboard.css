@@ -1,0 +1,147 @@
+
+.navbar {
+  background: #1f1f2e;
+  padding: 1rem 2rem;
+  color: white;
+  position: fixed;
+  top: 0;           
+  z-index: 1000;
+  width: 100%;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 5rem;
+  margin-right: 5rem;
+}
+
+.nav-logo {
+  font-size: 1.5rem;
+  color: #f7c948;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-links a,
+.nav-links button {
+  color: white;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.nav-links button:hover,
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+.menu-toggle {
+  display: none;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+#navbarcontainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+
+}
+/* Responsive */
+ @media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background: #1f1f2e;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    padding: 1rem;
+    border-radius: 10px;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+} 
+
+
+/*  */
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    /* background: linear-gradient(140deg, #EADEDB 0%, #BC70A4 50%, #BFD641 75%); */
+    background-color: hwb(231 90% 7%);
+    
+  }
+
+   #capsule-form {
+    background-color: #fff;
+    padding: 30px 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    max-width: 400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    align-content: center;
+  }
+
+  #capsule-form input,
+  #capsule-form textarea,
+  #capsule-form button {
+    font-size: 16px;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  #capsule-form textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  #capsule-form input:focus,
+  #capsule-form textarea:focus {
+    border-color: #5c6ac4;
+    outline: none;
+  }
+
+  #capsule-form button {
+    background-color: #5c6ac4;
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  #capsule-form button:hover {
+    background-color: #4a56a1;
+  }

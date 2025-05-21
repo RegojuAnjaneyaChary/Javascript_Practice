@@ -1,0 +1,18 @@
+body {
+  font-family: sans-serif;
+  background: #f8f8f8;
+  padding: 20px;
+}
+
+.container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 600px;
+  margin: auto;
+}
+
+#mediaPreview img, video, audio {
+  max-width: 100%;
+  margin-top: 15px;
+}

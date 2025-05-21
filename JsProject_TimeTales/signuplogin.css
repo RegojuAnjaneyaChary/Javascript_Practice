@@ -1,0 +1,88 @@
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: #76a343; optional */
+    background: linear-gradient(140deg, #EADEDB 0%, #BC70A4 50%, #BFD641 75%);
+}
+
+#SignUpform{
+
+    width: 27vw;
+    height: 65vh;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    align-content:center; 
+    background-color: #f0f0f0; 
+    font-family: Arial, Helvetica, sans-serif;
+    background-color:white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); optional ;
+    border-radius: 10px;
+    padding: auto;
+} 
+h1{
+    margin: 1rem;
+}
+input{
+    width: 15vw;
+    padding: 10px;
+    margin: 10px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+    font-size:16px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+#Signupbtn{
+
+    background-color: #5c6ac4;
+    color:white;
+    border-radius: 5px;
+    width: 10vw;
+    height:3vh ;
+    padding: 1rem;
+    font-size: larger;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#Signupbtn:hover {
+    background-color: #4a56a1;
+}
+#Loginform{
+  width: 27vw;
+    height: 52vh;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    align-content:center;
+    background-color: #f0f0f0; 
+    font-family: Arial, Helvetica, sans-serif;
+    background-color:white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); optional ;
+    border-radius: 10px;
+}
+#Loginbtn:hover {
+    background-color: #4a56a1;
+}
+#Loginbtn{
+    background-color: #5c6ac4;
+    color:white;
+    border-radius: 5px;
+    width: 10vw;
+    height:3vh ;
+    padding: 1rem;
+    font-size: larger;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
