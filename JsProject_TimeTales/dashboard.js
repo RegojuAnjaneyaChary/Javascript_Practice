@@ -3,11 +3,11 @@ import { serverTimestamp, addDoc, collection } from "https://www.gstatic.com/fir
 import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.7.0/firebase-auth.js";
 
 // Ensure user is authenticated
-onAuthStateChanged(auth, user => {
-  if (!user) {
-    window.location.href = "login.html";
-  }
-});
+// onAuthStateChanged(auth, user => {
+//   if (!user) {
+//     window.location.href = "login.html";
+//   }
+// });
 
 const form = document.getElementById("capsule-form");
 
