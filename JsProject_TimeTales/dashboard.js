@@ -1,71 +1,92 @@
-import { db, storage, auth } from "./firebase.js";
-import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
-import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-storage.js";
-import { signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { db, auth } from "./firebase.js";
+import { serverTimestamp, addDoc, collection } from "https://www.gstatic.com/firebasejs/11.7.0/firebase-firestore.js";
+import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.7.0/firebase-auth.js";
 
-const form = document.getElementById("capsule-form");
-const mediaInput = document.getElementById("media");
-const authBtn = document.getElementById("authBtn");
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const title = document.getElementById("title").value;
-  const description = document.getElementById("description").value;
-  const openDate = document.getElementById("openDate").value;
-  const mediaFile = mediaInput.files[0];
-
-  if (!mediaFile) {
-    alert("Please select a file");
-    return;
-  }
-
-  try {
-    // Upload media file to Firebase Storage
-    // const mediaRef = ref(storage, `capsules/${Date.now()}_${mediaFile.name}`);
-
-    const mediaRef = ref(storage, `capsules/${mediaFile.name}`);
-
-    await uploadBytes(mediaRef, mediaFile);     
-    const mediaURL = await getDownloadURL(mediaRef);
-
-    // Save metadata to Firestore
-    const saveddata=await addDoc(collection(db, "capsules"), {
-      title,
-      description,
-      openDate,
-      mediaURL,
-      createdAt: serverTimestamp(),
-      userId: auth.currentUser?.uid || null
-    });
-    console.log('capsule data', saveddata.id)
-
-    alert("Capsule saved successfully!");
-    console.log(title)
-    console.log(description)
-    console.log(openDate)
-    
-    // form.reset();
-  } catch (error) {
-    console.error("Error saving capsule:", error);
-    alert("Failed to save capsule.");
+// Ensure user is authenticated
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    window.location.href = "login.html";
   }
 });
 
-// Logout
+const form = document.getElementById("capsule-form");
 
-// authcurrentuser=authBtn.addEventListener("click", () => {
-//   signOut(auth)
-//     .then(() => {
-//       window.location.href = "./login.html";
-//     })
-//     console.log("user logged out", authcurrentuser )
+if (form) {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-//     .catch((error) => {
-//       console.error("Logout error:", error);
-//       alert("Failed to log out.");
-//     });
-// });
+    const title = document.getElementById("title").value.trim();
+    const description = document.getElementById("description").value.trim();
+    const media = document.getElementById("media").value.trim();
+    const openDate = document.getElementById("openDate").value;
+    const closeTime = document.getElementById("closeTime").value;
 
+    if (!title || !openDate || !closeTime) {
+      alert("Please fill in all required fields.");
+      return;
+    }
 
+    // Parse date and time
+    const [year, month, day] = openDate.split("-");
+    const isoDate = `${year}-${month}-${day}`;
+    const time24 = convertTo24Hour(closeTime);
 
+    const openTimeString = `${isoDate}T${time24}:00`;
+    const fullOpenTime = new Date(openTimeString);
+
+    if (isNaN(fullOpenTime.getTime())) {
+      alert("Invalid date or time.");
+      return;
+    }
+
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        alert("User not authenticated.");
+        return;
+      }
+
+      // Add a new capsule document to the "capsules" collection
+      await addDoc(collection(db, "capsules"), {
+        title,
+        description,
+        media,
+        openAt: fullOpenTime, // This is a JS Date, Firestore will store as Timestamp
+        createdAt: serverTimestamp(),
+        userId: user.uid
+      });
+
+      alert("Capsule saved!");
+      form.reset();
+    } catch (err) {
+      console.error("Error saving capsule:", err);
+      alert("Error saving capsule.");
+    }
+  });
+}
+
+function convertTo24Hour(time) {
+  let [hour, minute] = time.split(":");
+  hour = parseInt(hour, 10);
+  minute = parseInt(minute, 10);
+
+  if (
+    isNaN(hour) || isNaN(minute) ||
+    hour < 0 || hour > 23 ||
+    minute < 0 || minute > 59
+  ) {
+    return null;
+  }
+
+  return `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+}
+
+// Logout button
+const logoutBtn = document.getElementById("authBtn");
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    signOut(auth).then(() => {
+      window.location.href = "login.html";
+    });
+  });
+}

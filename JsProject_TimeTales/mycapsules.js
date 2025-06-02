@@ -1,4 +1,4 @@
-import { db, storage, auth } from "./firebase.js";
+import { auth, db } from "./firebase.js";
 import {
   collection,
   query,
@@ -7,89 +7,104 @@ import {
   deleteDoc,
   updateDoc,
   doc
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/11.7.0/firebase-firestore.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.7.0/firebase-auth.js";
 
-import { deleteObject, ref as storageRef } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-
-const listContainer = document.getElementById("capsule-list");
-const editModal = document.getElementById("editModal");
-const editTitle = document.getElementById("editTitle");
-const editDescription = document.getElementById("editDescription");
-const editOpenDate = document.getElementById("editOpenDate");
-const saveEditBtn = document.getElementById("saveEditBtn");
-const closeModalBtn = document.getElementById("closeModalBtn");
-
-let currentEditId = null;
+let currentId = null;
 
 // Fetch and display capsules
-async function loadCapsules() {
-  const user = auth.currentUser;
-  if (!user) return;
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return (window.location.href = "login.html");
 
   const q = query(collection(db, "capsules"), where("userId", "==", user.uid));
   const snapshot = await getDocs(q);
+  const list = document.getElementById("capsule-list");
+  list.innerHTML = "";
 
-  listContainer.innerHTML = "";
   snapshot.forEach((docSnap) => {
     const data = docSnap.data();
-    const card = document.createElement("div");
-    card.className = "capsule-card";
-    card.innerHTML = `
-      <h3>${data.title}</h3>
+    const openDate = data.openAt.toDate();
+    const now = new Date();
+
+    const li = document.createElement("li");
+    li.className = "capsule";
+    li.innerHTML = `
+      <h4>${data.title}</h4>
       <p>${data.description}</p>
-      <p>Opens on: ${data.openDate}</p>
-      <button onclick="editCapsule('${docSnap.id}', '${data.title}', '${data.description}', '${data.openDate}')">Edit</button>
-      <button onclick="deleteCapsule('${docSnap.id}', '${data.mediaURL}')">Delete</button>
+      ${
+        now >= openDate
+          ? `<a href="${data.media}" target="_blank">Open Capsule</a>`
+          : `<em>🔒 Capsule locked until: ${openDate.toLocaleString()}</em>`
+      }
+      <br>
+      <button class="btn primary" onclick='window.editCapsule("${docSnap.id}")'>Edit</button>
+      <button class="btn danger" onclick='window.deleteCapsule("${docSnap.id}")'>Delete</button>
+      <hr/>
     `;
-    listContainer.appendChild(card);
+    // Store data for editing
+    li.dataset.capsule = JSON.stringify({
+      id: docSnap.id,
+      ...data,
+      openAt: openDate.toISOString()
+    });
+    list.appendChild(li);
   });
-}
-
-// Delete capsule
-window.deleteCapsule = async (id, mediaURL) => {
-  if (!confirm("Delete this capsule?")) return;
-
-  await deleteDoc(doc(db, "capsules", id));
-
-  // Delete from Storage
-  const mediaPath = new URL(mediaURL).pathname.split("/o/")[1].split("?")[0];
-  const decodedPath = decodeURIComponent(mediaPath);
-  await deleteObject(storageRef(storage, decodedPath));
-
-  alert("Capsule deleted");
-  loadCapsules();
-};
-
-// Edit capsule
-window.editCapsule = (id, title, description, openDate) => {
-  currentEditId = id;
-  editTitle.value = title;
-  editDescription.value = description;
-  editOpenDate.value = openDate;
-  editModal.style.display = "block";
-};
-
-// Save edited capsule
-saveEditBtn.addEventListener("click", async () => {
-  if (!currentEditId) return;
-
-  const docRef = doc(db, "capsules", currentEditId);
-  await updateDoc(docRef, {
-    title: editTitle.value,
-    description: editDescription.value,
-    openDate: editOpenDate.value
-  });
-
-  alert("Capsule updated");
-  editModal.style.display = "none";
-  loadCapsules();
 });
 
-closeModalBtn.addEventListener("click", () => {
-  editModal.style.display = "none";
+// Edit Capsule
+window.editCapsule = (id) => {
+  currentId = id;
+  const list = document.getElementById("capsule-list");
+  const li = Array.from(list.children).find(
+    (el) => JSON.parse(el.dataset.capsule).id === id
+  );
+  const data = JSON.parse(li.dataset.capsule);
+
+  document.getElementById("editForm").classList.remove("hidden");
+  document.getElementById("editTitle").value = data.title;
+  document.getElementById("editDesc").value = data.description;
+  document.getElementById("editMedia").value = data.media;
+  document.getElementById("editOpenAt").value = data.openAt.slice(0, 16);
+};
+
+// Update Capsule
+document.getElementById("updateBtn").addEventListener("click", async () => {
+  if (!currentId) return;
+
+  const title = document.getElementById("editTitle").value;
+  const description = document.getElementById("editDesc").value;
+  const media = document.getElementById("editMedia").value;
+  const openAtInput = document.getElementById("editOpenAt").value;
+  const openAt = new Date(openAtInput);
+
+  await updateDoc(doc(db, "capsules", currentId), {
+    title,
+    description,
+    media,
+    openAt
+  });
+
+  alert("Capsule updated!");
+  document.getElementById("editForm").classList.add("hidden");
+  location.reload();
 });
 
-auth.onAuthStateChanged((user) => {
-  if (user) loadCapsules();
-  else window.location.href = "login.html";
+// Delete Capsule
+window.deleteCapsule = async (id) => {
+  if (confirm("Delete this capsule?")) {
+    await deleteDoc(doc(db, "capsules", id));
+    alert("Capsule deleted!");
+    location.reload();
+  }
+};
+
+// Cancel Edit
+document.getElementById("cancelEditBtn").addEventListener("click", () => {
+  document.getElementById("editForm").classList.add("hidden");
+  currentId = null;
+});
+
+// Logout
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  signOut(auth);
 });

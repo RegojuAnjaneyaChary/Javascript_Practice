@@ -4,27 +4,39 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>My Capsules</title>
-  <link rel="stylesheet" href="./mycapsules.css" />
+  <link rel="stylesheet" href="mycapsules.css">
 </head>
 <body>
-  <h1>My Capsules</h1>
-  <div id="capsule-list">
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="dashboard.html" class="nav-link">➕ Create Capsule</a>
+      <button id="logoutBtn" class="btn">Logout</button>
+    </div>
+  </nav>
 
-  <!-- Edit Modal -->
   
-    <div class="modal-content">
-      <h2>Edit Capsule</h2>
+
+  <main class="main-content">
+    <h2>📦 My Capsules</h2>
+    <ul id="capsule-list" class="capsule-list"></ul>
+
+    <div id="editForm" class="edit-form hidden">
+      <h3>Edit Capsule</h3>
       <input type="text" id="editTitle" placeholder="Title" />
-      <textarea id="editDescription" placeholder="Description"></textarea>
-      <input type="date" id="editOpenDate" />
-      <div>
-      <button id="saveEditBtn">Save</button>
-      <button id="closeModalBtn">Cancel</button>
+      <textarea id="editDesc" placeholder="Description"></textarea>
+      <input type="url" id="editMedia" placeholder="Media URL" />
+      <input type="datetime-local" id="editOpenAt" />
+
+      <div class="form-buttons">
+        <button id="updateBtn" class="btn primary">Update</button>
+        <button id="deleteBtn" class="btn danger">Delete</button>
+        <button id="cancelEditBtn" class="btn secondary">Cancel</button>
       </div>
     </div>
-    </div>
+  </main>
 
 
-  <script type="module" src="./mycapsules.js"></script>
+
+  <script type="module" src="mycapsules.js"></script>
 </body>
 </html>
