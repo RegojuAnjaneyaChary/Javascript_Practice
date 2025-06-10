@@ -10,32 +10,30 @@
   <nav class="navbar">
     <div class="nav-container">
       <a href="dashboard.html" class="nav-link">➕ Create Capsule</a>
+      <a href="opencapsules.html" class="nav-link">Open Capsules</a>
       <button id="logoutBtn" class="btn">Logout</button>
     </div>
   </nav>
-
-  
 
   <main class="main-content">
     <h2>📦 My Capsules</h2>
     <ul id="capsule-list" class="capsule-list"></ul>
 
-    <div id="editForm" class="edit-form hidden">
+    <form id="capsule-form" style="display:none;">
       <h3>Edit Capsule</h3>
-      <input type="text" id="editTitle" placeholder="Title" />
-      <textarea id="editDesc" placeholder="Description"></textarea>
-      <input type="url" id="editMedia" placeholder="Media URL" />
-      <input type="datetime-local" id="editOpenAt" />
-
+      <input type="text" id="title" placeholder="Title" required />
+      <textarea id="description" placeholder="Description"></textarea>
+      <input type="url" id="media" placeholder="Media URL" />
+      <input type="tel" id="mobile" placeholder="+91 9876543210" pattern="^\+?\d{10,15}$" required />
+     <a id="whatsappLink" href="#" target="_blank" style="display:none;">Share on WhatsApp</a>
+      <input type="datetime-local" id="openDate" required />
       <div class="form-buttons">
-        <button id="updateBtn" class="btn primary">Update</button>
-        <button id="deleteBtn" class="btn danger">Delete</button>
-        <button id="cancelEditBtn" class="btn secondary">Cancel</button>
+        <button id="updateBtn" class="btn primary" type="submit">Update</button>
+        <button id="deleteBtn" class="btn danger" type="button" style="display:none;">Delete</button>
+        <button id="cancelEditBtn" class="btn secondary" type="button">Cancel</button>
       </div>
-    </div>
+    </form>
   </main>
-
-
 
   <script type="module" src="mycapsules.js"></script>
 </body>

@@ -7,40 +7,36 @@
   <link rel="stylesheet" href="./dashboard.css">
 </head>
 <body>
-
-
-    <nav class="navbar">
-       <div class="nav-container">
-       <a href="" class="nav-logo">TimeTales</a>
-       <div class="nav-links">
-       <div id="capsule-links">
-         <a href="./opencapsules.html">OpenDate Capsule</a>
-        <a href="./mycapsules.html">Edit Capsules</a>
-       </div>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="" class="nav-logo">TimeTales</a>
+      <div class="nav-links">
+        <div id="capsule-links">
+          <a href="./opencapsules.html">OpenDate Capsule</a>
+          <a href="./mycapsules.html">Edit Capsules</a>
+        </div>
         <button id="authBtn">Logout</button>
       </div>
-</nav> 
-
+    </div>
+  </nav> 
 
   <form id="capsule-form">
     <h1>Create Capsule</h1>
     <input type="text" id="title" placeholder="Title" required>
     <textarea id="description" placeholder="Description"></textarea>
     <input type="url" id="media" placeholder="Media URL">
-    <input type="date" id="openDate" required>
+    <input type="tel" id="mobile" placeholder="+91 9876543210" pattern="^\+?\d{10,15}$" required>
+    <a id="whatsappLink" href="#" target="_blank" style="display:none;">Share on WhatsApp</a>
     
     <div class="time-group">
+       <label for="closeTime">Date:</label>
+      <input type="date" id="openDate" required>
       <label for="closeTime">Time:</label>
       <input type="time" id="closeTime" required>
-
-     
     </div>
-    
     <button type="submit">Save Capsule</button>
   </form>
 
-
   <script type="module" src="./dashboard.js"></script>
 </body>
-</html> 
-
+</html>

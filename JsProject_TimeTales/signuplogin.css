@@ -1,105 +1,122 @@
+/* ====== Color Palette ====== */
+:root {
+  --primary-bg: #f4f6fb;
+  --primary-dark: #1f1f2e;
+  --primary-accent: #f7c948;
+  --primary-btn: #5c6ac4;
+  --primary-btn-hover: #3d4785;
+  --primary-link: #0074d9;
+  --white: #fff;
+  --danger: #e74c3c;
+  --success: #27ae60;
+  --border: #eee;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+/* ====== Reset & Base ====== */
 body {
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(140deg, #EADEDB 0%, #BC70A4 50%, #BFD641 75%);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: var(--primary-bg);
+  color: var(--primary-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-#SignUpform, #Loginform {
-    width: 27vw;
-    min-width: 300px;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
-    background-color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    padding: 2rem 3rem;
+/* ====== Dealer Name (Signup) ====== */
+#dealername {
+  margin-top: 2rem;
+  color: var(--primary-btn);
+  font-size: 1.5rem;
+  text-align: center;
 }
 
-h1 {
-    margin: 1rem 0;
+/* ====== Signup/Login Form ====== */
+form {
+  background: var(--white);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  padding: 2rem 2.5rem;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-width: 400px;
+  width: 100%;
+}
+form h1 {
+  margin-bottom: 1.5rem;
+  color: var(--primary-dark);
+  font-size: 1.6rem;
+  text-align: center;
+}
+form input {
+  margin: 0.5rem 0 1rem 0;
+  padding: 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 1rem;
+  font-family: inherit;
+  background: #f9f9fb;
+  color: var(--primary-dark);
+}
+form button, .btn {
+  background: var(--primary-btn);
+  color: var(--white);
+  border: none;
+  border-radius: 5px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1.1rem;
+  margin: 0.5rem 0 0.5rem 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+form button:hover, .btn:hover {
+  background: var(--primary-btn-hover);
+}
+form span {
+  text-align: center;
+  margin-top: 1rem;
+  color: #444;
+  font-size: 1rem;
+}
+form a {
+  color: var(--primary-link);
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+form a:hover {
+  color: var(--primary-btn);
 }
 
-input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-#Signupbtn, #Loginbtn {
-    background-color: #5c6ac4;
-    color: white;
-    border-radius: 5px;
-    width: 100%;
-    min-width: 120px;
-    height: 3rem;
-    padding: 0.5rem;
-    font-size: 1.1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    margin-top: 1rem;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-#Signupbtn:hover, #Loginbtn:hover {
-    background-color: #4a56a1;
-}
-
-span {
-    margin-top: 1rem;
-    font-size: 0.95rem;
-}
-
-/* Responsive styles */
-
-/* Tablets */
+/* ====== Responsive: Tablet ====== */
 @media (max-width: 900px) {
-    #SignUpform, #Loginform {
-        width: 60vw;
-        min-width: 220px;
-        max-width: 90vw;
-        padding: 1.5rem 1.5rem;
-    }
-    input {
-        font-size: 15px;
-    }
+  form {
+    max-width: 90vw;
+    padding: 1.5rem 1rem;
+  }
 }
 
-/* Mobile */
+/* ====== Responsive: Mobile ====== */
 @media (max-width: 600px) {
-    body {
-        padding: 0;
-    }
-    #SignUpform, #Loginform {
-        width: 95vw;
-        min-width: unset;
-        max-width: 98vw;
-        padding: 3rem 1.5rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-    input {
-        font-size: 14px;
-        padding: 6px;
-    }
-    #Signupbtn, #Loginbtn {
-        font-size: 1rem;
-        height: 2.5rem;
-        min-width: 90px;
-    }
-    h1 {
-        font-size: 1.5rem;
-    }
+  #dealername {
+    font-size: 1.1rem;
+    margin-top: 1rem;
+  }
+  form {
+    max-width: 90vw;
+    padding: 1rem 0.3rem;
+    margin: 1.5rem auto 0 auto;
+  }
+  form h1 {
+    font-size: 1.2rem;
+  }
+  form input, form button {
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
+  }
 }

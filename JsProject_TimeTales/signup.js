@@ -1,3 +1,14 @@
+// Show dealer name if present in localStorage
+let loggedindealer = JSON.parse(localStorage.getItem("dealer credentials"));
+let dealername = document.getElementById("dealername");
+if (dealername) {
+    if (loggedindealer && loggedindealer.nameDealer) {
+        dealername.innerHTML = `Welcome "${loggedindealer.nameDealer}"`;
+    } else {
+        dealername.innerHTML = "Welcome";
+    }
+}
+
 import { auth, db } from "./firebase.js";
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.7.0/firebase-auth.js";
 import { collection, addDoc } from "https://www.gstatic.com/firebasejs/11.7.0/firebase-firestore.js";
@@ -24,7 +35,7 @@ document.getElementById("SignUpform").addEventListener("submit", async (e) => {
         await addDoc(collection(db, "users"), {
             name,
             email,
-            uid: user.uid
+            uid: user.uid // or userId: user.uid
         });
 
         alert("User created successfully");

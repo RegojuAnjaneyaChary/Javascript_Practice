@@ -1,110 +1,191 @@
-import { auth, db } from "./firebase.js";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  deleteDoc,
-  updateDoc,
-  doc
-} from "https://www.gstatic.com/firebasejs/11.7.0/firebase-firestore.js";
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.7.0/firebase-auth.js";
+import { db, auth } from "./firebase.js";
+import { serverTimestamp, addDoc, collection, query, where, getDocs, doc, updateDoc, deleteDoc, Timestamp } from "https://www.gstatic.com/firebasejs/11.7.0/firebase-firestore.js";
+import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.7.0/firebase-auth.js";
 
-let currentId = null;
+const form = document.getElementById("capsule-form");
+const mobileInput = document.getElementById("mobile");
+const smsLink = document.getElementById("smsLink");
+const whatsappLink = document.getElementById("whatsappLink");
+const capsuleList = document.getElementById("capsule-list");
 
-// Fetch and display capsules
-onAuthStateChanged(auth, async (user) => {
-  if (!user) return (window.location.href = "login.html");
+// --- Capsule Creation ---
+if (form) {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  const q = query(collection(db, "capsules"), where("userId", "==", user.uid));
-  const snapshot = await getDocs(q);
-  const list = document.getElementById("capsule-list");
-  list.innerHTML = "";
+    const title = document.getElementById("title")?.value.trim();
+    const description = document.getElementById("description")?.value.trim();
+    const media = document.getElementById("media")?.value.trim();
+    const mobile = mobileInput?.value.trim();
+    const openDate = document.getElementById("openDate")?.value;
+    const closeTime = document.getElementById("closeTime")?.value;
 
-  snapshot.forEach((docSnap) => {
-    const data = docSnap.data();
-    const openDate = data.openAt.toDate();
-    const now = new Date();
+    if (!title || !openDate || !closeTime || !mobile) {
+      alert("Please fill in all required fields.");
+      return;
+    }
 
-    const li = document.createElement("li");
-    li.className = "capsule";
-    li.innerHTML = `
-      <h4>${data.title}</h4>
-      <p>${data.description}</p>
-      ${
-        now >= openDate
-          ? `<a href="${data.media}" target="_blank">Open Capsule</a>`
-          : `<em>🔒 Capsule locked until: ${openDate.toLocaleString()}</em>`
+    const time24 = convertTo24Hour(closeTime);
+    if (!time24) {
+      alert("Invalid time format.");
+      return;
+    }
+
+    const fullOpenTime = new Date(`${openDate}T${time24}:00`);
+    if (isNaN(fullOpenTime.getTime())) {
+      alert("Invalid date or time.");
+      return;
+    }
+
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        alert("User not authenticated.");
+        return;
       }
-      <br>
-      <button class="btn primary" onclick='window.editCapsule("${docSnap.id}")'>Edit</button>
-      <button class="btn danger" onclick='window.deleteCapsule("${docSnap.id}")'>Delete</button>
-      <hr/>
-    `;
-    // Store data for editing
-    li.dataset.capsule = JSON.stringify({
-      id: docSnap.id,
-      ...data,
-      openAt: openDate.toISOString()
-    });
-    list.appendChild(li);
+
+      // Save to Firestore
+      await addDoc(collection(db, "capsules"), {
+        title,
+        description,
+        media,
+        mobile,
+        openAt: fullOpenTime,
+        createdAt: serverTimestamp(),
+        userId: user.uid,
+        userEmail: user.email
+      });
+
+      alert("Capsule saved!");
+
+      // Show SMS share button after saving
+      const cleanMobile = mobile.replace(/\D/g, "");
+      if (cleanMobile.length >= 10 && smsLink) {
+        const msg = encodeURIComponent(
+          `🎉 Your TimeTales capsule has been created!\n\n📌 Title: ${title}\n📝 Description: ${description || "No description"}\n📅 Opens at: ${fullOpenTime.toLocaleString()}`
+        );
+        smsLink.href = `sms:${cleanMobile}?body=${msg}`;
+        smsLink.style.display = "inline";
+      } else if (smsLink) {
+        smsLink.style.display = "none";
+      }
+
+      // Show WhatsApp share button after saving
+      if (cleanMobile.length >= 10 && whatsappLink) {
+        const msg = encodeURIComponent(
+          `🎉 Your TimeTales capsule has been created!\n\n📌 Title: ${title}\n📝 Description: ${description || "No description"}\n📅 Opens at: ${fullOpenTime.toLocaleString()}`
+        );
+        whatsappLink.href = `https://wa.me/${cleanMobile}?text=${msg}`;
+        whatsappLink.style.display = "inline";
+      } else if (whatsappLink) {
+        whatsappLink.style.display = "none";
+      }
+
+      form.reset();
+      // Refresh the list after adding
+      loadCapsules();
+    } catch (err) {
+      console.error("Error saving capsule:", err);
+      alert("Error saving capsule.");
+    }
   });
-});
+}
 
-// Edit Capsule
-window.editCapsule = (id) => {
-  currentId = id;
-  const list = document.getElementById("capsule-list");
-  const li = Array.from(list.children).find(
-    (el) => JSON.parse(el.dataset.capsule).id === id
-  );
-  const data = JSON.parse(li.dataset.capsule);
+// --- WhatsApp link logic on mobile input ---
+if (mobileInput && whatsappLink) {
+  mobileInput.addEventListener("input", () => {
+    const mobile = mobileInput.value.replace(/\D/g, "");
+    const title = document.getElementById("title")?.value.trim() || "";
+    const description = document.getElementById("description")?.value.trim() || "";
+    if (mobile.length >= 10) {
+      const msg = encodeURIComponent(
+        `Your TimeTales capsule:\nTitle: ${title}\nDescription: ${description || "No description"}`
+      );
+      whatsappLink.href = `https://wa.me/${mobile}?text=${msg}`;
+      whatsappLink.style.display = "inline";
+    } else {
+      whatsappLink.style.display = "none";
+    }
+  });
+}
 
-  document.getElementById("editForm").classList.remove("hidden");
-  document.getElementById("editTitle").value = data.title;
-  document.getElementById("editDesc").value = data.description;
-  document.getElementById("editMedia").value = data.media;
-  document.getElementById("editOpenAt").value = data.openAt.slice(0, 16);
+// --- Fetch and Display Capsules ---
+async function loadCapsules() {
+  if (!capsuleList) return;
+  capsuleList.innerHTML = "<li>Loading...</li>";
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      capsuleList.innerHTML = "<li>Please log in to view your capsules.</li>";
+      return;
+    }
+    const q = query(collection(db, "capsules"), where("userId", "==", user.uid));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      capsuleList.innerHTML = "<li>No capsules found.</li>";
+      return;
+    }
+
+    capsuleList.innerHTML = "";
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      const openAt = data.openAt?.toDate ? data.openAt.toDate() : new Date(data.openAt);
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <strong>${data.title}</strong><br>
+        ${data.description || ""}<br>
+        <small>Opens at: ${openAt.toLocaleString()}</small><br>
+        <button onclick="editCapsule('${docSnap.id}')">Edit</button>
+        <button onclick="deleteCapsule('${docSnap.id}')">Delete</button>
+        <hr>
+      `;
+      capsuleList.appendChild(li);
+    });
+  });
+}
+
+// --- Edit and Delete Functions (window-scoped for button onclick) ---
+window.editCapsule = async function (id) {
+  // You can implement a modal or form population logic here
+  alert("Edit functionality not implemented in this snippet.");
 };
 
-// Update Capsule
-document.getElementById("updateBtn").addEventListener("click", async () => {
-  if (!currentId) return;
-
-  const title = document.getElementById("editTitle").value;
-  const description = document.getElementById("editDesc").value;
-  const media = document.getElementById("editMedia").value;
-  const openAtInput = document.getElementById("editOpenAt").value;
-  const openAt = new Date(openAtInput);
-
-  await updateDoc(doc(db, "capsules", currentId), {
-    title,
-    description,
-    media,
-    openAt
-  });
-
-  alert("Capsule updated!");
-  document.getElementById("editForm").classList.add("hidden");
-  location.reload();
-});
-
-// Delete Capsule
-window.deleteCapsule = async (id) => {
+window.deleteCapsule = async function (id) {
   if (confirm("Delete this capsule?")) {
     await deleteDoc(doc(db, "capsules", id));
     alert("Capsule deleted!");
-    location.reload();
+    loadCapsules();
   }
 };
 
-// Cancel Edit
-document.getElementById("cancelEditBtn").addEventListener("click", () => {
-  document.getElementById("editForm").classList.add("hidden");
-  currentId = null;
-});
+// --- Hide SMS and WhatsApp link by default ---
+if (smsLink) {
+  smsLink.style.display = "none";
+}
+if (whatsappLink) {
+  whatsappLink.style.display = "none";
+}
 
-// Logout
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  signOut(auth);
-});
+// --- Logout button ---
+const logoutBtn = document.getElementById("logoutBtn");
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    signOut(auth).then(() => {
+      window.location.href = "login.html";
+    });
+  });
+}
+
+// --- Utility: Convert to 24-hour format ---
+function convertTo24Hour(time) {
+  if (!time.includes(":")) return null;
+  let [hour, minute] = time.split(":");
+  hour = parseInt(hour, 10);
+  minute = parseInt(minute, 10);
+  if (isNaN(hour) || isNaN(minute) || hour > 23 || minute > 59) return null;
+  return `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+}
+
+// --- Load capsules on page load ---
+loadCapsules();
