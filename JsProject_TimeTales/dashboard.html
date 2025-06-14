@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <link rel="stylesheet" href="./dashboard.css">
 </head>
 <body>
@@ -11,6 +13,8 @@
     <div class="nav-container">
       <a href="" class="nav-logo">TimeTales</a>
       <div class="nav-links">
+      <span id="navbar-username" style="margin-right:1rem;font-weight:bold;"></span>
+
         <div id="capsule-links">
           <a href="./opencapsules.html">OpenDate Capsule</a>
           <a href="./mycapsules.html">Edit Capsules</a>
@@ -25,9 +29,8 @@
     <input type="text" id="title" placeholder="Title" required>
     <textarea id="description" placeholder="Description"></textarea>
     <input type="url" id="media" placeholder="Media URL">
-    <input type="tel" id="mobile" placeholder="+91 9876543210" pattern="^\+?\d{10,15}$" required>
-    <a id="whatsappLink" href="#" target="_blank" style="display:none;">Share on WhatsApp</a>
     
+
     <div class="time-group">
        <label for="closeTime">Date:</label>
       <input type="date" id="openDate" required>

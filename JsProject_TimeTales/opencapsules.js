@@ -4,6 +4,27 @@ import { collection, query, where, getDocs } from "https://www.gstatic.com/fireb
 
 const container = document.querySelector(".container");
 const logoutBtn = document.getElementById("logoutBtn");
+const navbarUsername = document.getElementById("navbar-username");
+
+// Show user name in navbar
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    // window.location.href = "login.html";
+    return;
+  }
+
+  // Fetch and show user name
+  if (navbarUsername) {
+    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+    const snapshot = await getDocs(q);
+    if (!snapshot.empty) {
+      const userData = snapshot.docs[0].data();
+      navbarUsername.textContent = `Welcome, ${userData.name}`;
+    }
+  }
+
+  await loadOpenCapsules(user.uid);
+});
 
 // Logout
 if (logoutBtn) {
@@ -14,15 +35,7 @@ if (logoutBtn) {
   });
 }
 
-// On user login
-onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    window.location.href = "login.html";
-    return;
-  }
-  await loadOpenCapsules(user.uid);
-});
-
+// Load open capsules for user
 async function loadOpenCapsules(userId) {
   if (!container) return console.error("Missing .container element in HTML");
 
@@ -33,7 +46,7 @@ async function loadOpenCapsules(userId) {
 
   container.innerHTML = "";
 
-  snapshot.forEach(docSnap => {
+  snapshot.forEach((docSnap) => {
     const data = docSnap.data();
     if (!data.openAt) return;
 
@@ -50,23 +63,7 @@ async function loadOpenCapsules(userId) {
       const capsuleDiv = document.createElement("div");
       capsuleDiv.className = "open-capsule";
 
-      // WhatsApp logic
-      let whatsappBtn = "";
-      if (data.mobile) {
-        const cleanMobile = data.mobile.replace(/\D/g, "");
-        if (cleanMobile.length >= 10) {
-          const countryCode = cleanMobile.startsWith("91") ? "" : "91"; // assume India if not provided
-          const msg = encodeURIComponent(
-            `🎉 Your TimeTales capsule is now open! 🎁\n\n📌 Title: ${data.title}\n📝 Description: ${data.description || "No description"}\n${data.media ? `📎 Media: ${data.media}\n` : ""}\n📅 Opened on: ${openAt.toLocaleString()}`
-          );
-          whatsappBtn = `
-            <a class="whatsapp-share" href="https://wa.me/${countryCode}${cleanMobile}?text=${msg}" target="_blank">
-              📲 Share on WhatsApp
-            </a>`;
-        }
-      }
-
-      // SMS logic
+      // SMS share button
       let smsBtn = "";
       if (data.mobile) {
         const cleanMobile = data.mobile.replace(/\D/g, "");
@@ -87,7 +84,6 @@ async function loadOpenCapsules(userId) {
         <p><strong>Opened on:</strong> ${openAt.toLocaleString()}</p>
         <p><strong>Created by:</strong> ${data.userEmail || data.userId}</p>
         ${data.media ? renderMedia(data.media) : "<em>No media</em>"}
-        ${whatsappBtn}
         ${smsBtn}
         <hr/>
       `;
@@ -100,14 +96,38 @@ async function loadOpenCapsules(userId) {
   }
 }
 
+
 function renderMedia(mediaURL) {
-  if (/\.(jpg|jpeg|png|gif)$/i.test(mediaURL)) {
-    return `<img src="${mediaURL}" alt="Capsule Image" style="max-width:100%;max-height:300px;">`;
-  } else if (/\.(mp4|webm)$/i.test(mediaURL)) {
-    return `<video controls src="${mediaURL}" style="max-width:100%;max-height:300px;"></video>`;
-  } else if (/\.(mp3|wav)$/i.test(mediaURL)) {
-    return `<audio controls src="${mediaURL}"></audio>`;
-  } else {
-    return `<a href="${mediaURL}" target="_blank">📁 View/Download Media</a>`;
+  if (!mediaURL) return "<em>No media</em>";
+
+  const parts = mediaURL.split('/');
+  const fileName = decodeURIComponent(parts[parts.length - 1]); // extract file name from URL
+  const fileExtension = fileName.split('.').pop().toLowerCase();
+
+  if (/\.(jpg|jpeg|png|gif|webp)$/i.test(fileName)) {
+    return `<img src="${mediaURL}" alt="${fileName}" 
+      style="max-width:100%;max-height:300px;border-radius:8px;
+      box-shadow:0 1px 6px rgba(0,0,0,0.07);margin:1rem 0;">`;
+  }
+
+  else if (/\.(mp4|webm)$/i.test(fileName)) {
+    return `<video controls src="${mediaURL}"
+      style="max-width:100%;max-height:300px;border-radius:8px;
+      box-shadow:0 1px 6px rgba(0,0,0,0.07);margin:1rem 0;"></video>`;
+  }
+
+  else if (/\.(mp3|wav|ogg)$/i.test(fileName)) {
+    return `<audio controls src="${mediaURL}" style="width:100%;margin:1rem 0;"></audio>`;
+  }
+
+  else {
+   
+    return `
+  <p class="media-link-wrapper">
+    📁 <a href="${mediaURL}" target="_blank" rel="noopener noreferrer" class="media-link-button">
+      Open ${fileName}
+    </a>
+  </p>`;
+
   }
 }

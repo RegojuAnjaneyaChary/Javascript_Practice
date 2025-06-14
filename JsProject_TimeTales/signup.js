@@ -1,14 +1,3 @@
-// Show dealer name if present in localStorage
-let loggedindealer = JSON.parse(localStorage.getItem("dealer credentials"));
-let dealername = document.getElementById("dealername");
-if (dealername) {
-    if (loggedindealer && loggedindealer.nameDealer) {
-        dealername.innerHTML = `Welcome "${loggedindealer.nameDealer}"`;
-    } else {
-        dealername.innerHTML = "Welcome";
-    }
-}
-
 import { auth, db } from "./firebase.js";
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.7.0/firebase-auth.js";
 import { collection, addDoc } from "https://www.gstatic.com/firebasejs/11.7.0/firebase-firestore.js";
@@ -21,7 +10,7 @@ document.getElementById("SignUpform").addEventListener("submit", async (e) => {
     const password = document.getElementById("password").value.trim();
 
     if (!name || !email || !password) {
-        alert("Please fill in all fields.");
+        Swal.fire("Error", "Please fill in all fields.", "warning");
         return;
     }
 
@@ -29,19 +18,27 @@ document.getElementById("SignUpform").addEventListener("submit", async (e) => {
         // Create user in Firebase Auth
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        console.log("User created successfully", user);
 
         // Store user info in Firestore (do NOT store password)
         await addDoc(collection(db, "users"), {
             name,
             email,
-            uid: user.uid // or userId: user.uid
+            uid: user.uid
         });
 
-        alert("User created successfully");
+        // Show success SweetAlert
+        await Swal.fire({
+            title: "Signup Successful!",
+            text: "Your account has been created.",
+            icon: "success",
+            confirmButtonText: "OK"
+        });
+
+        // Redirect after confirmation
         window.location.href = "./login.html";
+        
     } catch (error) {
         console.error("Error creating user", error);
-        alert(error.message);
+        Swal.fire("Signup Failed", error.message, "error");
     }
 });

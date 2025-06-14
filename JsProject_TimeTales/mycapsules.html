@@ -3,38 +3,75 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Capsules</title>
+  <title>My Capsules | TimeTales</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <link rel="stylesheet" href="mycapsules.css">
 </head>
 <body>
+  <!-- Navbar -->
   <nav class="navbar">
     <div class="nav-container">
-      <a href="dashboard.html" class="nav-link">➕ Create Capsule</a>
-      <a href="opencapsules.html" class="nav-link">Open Capsules</a>
-      <button id="logoutBtn" class="btn">Logout</button>
+      <a href="dashboard.html" class="nav-logo">TimeTales</a>
+      <div class="nav-links">
+        <span id="navbar-username" style="margin-right:1rem; font-weight:bold;"></span>
+        <div id="capsule-links">
+          <a href="opencapsules.html" class="nav-link">OpenDate Capsule</a>
+          <a href="dashboard.html" class="nav-link">Create Capsule</a>
+        </div>
+        <button id="logoutBtn" class="btn logout-btn">Logout</button>
+      </div>
     </div>
   </nav>
 
+  <!-- Main Content -->
   <main class="main-content">
-    <h2>📦 My Capsules</h2>
-    <ul id="capsule-list" class="capsule-list"></ul>
+    <h2 class="section-title">📦 My Capsules</h2>
 
-    <form id="capsule-form" style="display:none;">
+    <!-- Capsule List -->
+    <ul id="capsule-list" class="capsule-list">
+      <!-- Capsules will be inserted dynamically by JS -->
+      <!-- Example (You will generate this via JavaScript):
+      <li>
+        <strong>Capsule Title</strong>
+        <p>Description text...</p>
+        <small>Open on: 2025-07-20 09:00 AM</small>
+        <div class="form-buttons">
+          <button class="btn edit" onclick="editCapsule(id)">Edit</button>
+        </div>
+      </li>
+      -->
+    </ul>
+
+    <!-- Capsule Edit Form -->
+    <form id="capsule-form" style="display: none;">
       <h3>Edit Capsule</h3>
+      <div class="time-group">
+      <label for="title">Title</label>
       <input type="text" id="title" placeholder="Title" required />
+
+      <label for="description">Description</label>
       <textarea id="description" placeholder="Description"></textarea>
-      <input type="url" id="media" placeholder="Media URL" />
-      <input type="tel" id="mobile" placeholder="+91 9876543210" pattern="^\+?\d{10,15}$" required />
-     <a id="whatsappLink" href="#" target="_blank" style="display:none;">Share on WhatsApp</a>
-      <input type="datetime-local" id="openDate" required />
+
+      <label for="media">Media URL</label>
+      <input type="url" id="media" placeholder="Media URL (image/video/audio/link)" />
+
+      
+        <label for="openDate">Open Date:</label>
+        <input type="date" id="openDate" required>
+
+        <label for="closeTime">Open Time:</label>
+        <input type="time" id="closeTime" required>
+      </div>
+
       <div class="form-buttons">
-        <button id="updateBtn" class="btn primary" type="submit">Update</button>
-        <button id="deleteBtn" class="btn danger" type="button" style="display:none;">Delete</button>
+        <button id="updateBtn" class="btn primary" type="submit">Update Capsule</button>
+        <!-- <button id="deleteBtn" class="btn delete" type="button">Delete</button> -->
         <button id="cancelEditBtn" class="btn secondary" type="button">Cancel</button>
       </div>
     </form>
   </main>
-
+   
   <script type="module" src="mycapsules.js"></script>
 </body>
 </html>
